@@ -1,0 +1,86 @@
+.translate-box {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-width: 700px; 
+}
+
+.translate-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f5f5f5;
+  padding: 12px 16px;
+  font-weight: 500;
+  font-size: 14px;
+  color: #444;
+}
+
+.label {
+  color: #6C4AB6;
+}
+
+.submit-btn {
+  background-color: transparent;
+  color: #6C4AB6;
+  border: 2px solid #6C4AB6;
+  border-radius: 8px;
+  padding: 6px 16px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.submit-btn:hover {
+  background-color: #f3efff;
+}
+
+
+.translate-body {
+  display: flex;
+  min-height: 140px;
+}
+
+.translate-input {
+  flex: 1;
+  border: none;
+  resize: none;
+  padding: 24px;
+  font-size: 18px;
+  line-height: 1.5;
+  outline: none;
+  min-height: 180px;
+}
+
+.translate-preview {
+  flex: 1;
+  background: #f3f3f3;
+  padding: 24px;
+  font-size: 16px;
+}
+
+
+.emoji-burst {
+  position: absolute;
+  font-size: 34px;
+  animation: riseAndFade 2s ease-out forwards;
+  pointer-events: none;
+  z-index: 9999;
+  user-select: none;
+}
+
+@keyframes riseAndFade {
+  0% {
+    opacity: 1;
+    transform: translateY(0px) scale(1) rotate(0deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-200px) scale(0.5) rotate(360deg);
+  }
+}

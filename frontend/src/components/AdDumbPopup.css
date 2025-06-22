@@ -1,0 +1,41 @@
+.popup-ad {
+  position: fixed;
+  right: 16px;          /* заменили left → right */
+  top: 25%;
+  width: 200px;
+  background: #fff;
+  border: 3px solid #ff5252;
+  border-radius: 8px;
+  box-shadow: 0 0 15px rgba(255, 82, 82, 0.5);
+  text-decoration: none;
+  color: #000;
+  z-index: 1000;
+  animation: shake 1s infinite alternate;
+  transition: transform 0.2s;
+}
+
+.popup-ad:hover {
+  transform: scale(1.05);
+}
+
+.popup-ad img {
+  width: 100%;
+  height: 100px;
+  object-fit: cover;
+  border-bottom: 2px solid #ff5252;
+}
+
+.popup-text {
+  padding: 8px;
+  font-size: 14px;
+}
+
+.popup-text strong {
+  color: #ff5252;
+  font-size: 15px;
+}
+
+@keyframes shake {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-3px); }  /* теперь влево трясёт */
+}
