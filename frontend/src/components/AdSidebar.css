@@ -1,0 +1,54 @@
+.ad-sidebar {
+  width: 240px;
+  flex-shrink: 0;
+  padding: 32px 24px 32px 32px; /* сверху, справа, снизу, слева — особенно слева больше */
+  background-color: #E6E6FA;
+  display: flex;
+  flex-direction: column;
+  gap: 24px; /* между карточками */
+}
+
+/* каждая реклама — блок */
+.ad-card {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #ccc;
+  border-radius: 16px;
+  overflow: hidden;
+  background: white;
+  text-decoration: none;
+  color: #333;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s;
+}
+
+.ad-card:hover {
+  transform: scale(1.03);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+}
+
+/* картинка */
+.ad-card img {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+}
+
+/* текст */
+.ad-content {
+  padding: 16px;
+}
+
+.ad-content h4 {
+  margin: 0 0 8px;
+  font-size: 17px;
+  color: #4C97B0;
+  line-height: 1.3;
+}
+
+.ad-content p {
+  margin: 0;
+  font-size: 14px;
+  color: #555;
+  line-height: 1.5;
+}
