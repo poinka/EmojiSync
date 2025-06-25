@@ -7,6 +7,6 @@ from ..models import *
 @app.post("/process")
 async def transform_text(request: TextRequest):
     original_text = request.text
-    transformed_text = original_text.upper()  # 👈 логика обработки текста
+    transformed_text = original_text.upper() 
 
     return {"original": original_text, "transformed": transformed_text}

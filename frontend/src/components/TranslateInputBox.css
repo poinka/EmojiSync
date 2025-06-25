@@ -84,3 +84,25 @@
     transform: translateY(-200px) scale(0.5) rotate(360deg);
   }
 }
+
+.translate-input::placeholder {
+  color: #bcbcbc; 
+  font-style: italic;
+  font-size: 14px;
+}
+
+.translate-preview,
+.translate-hint {
+  color: #bcbcbc;
+  font-style: italic;
+  font-size: 14px;
+}
+
+.translate-input,
+.translate-result {
+  color: #222;
+  font-style: normal;
+  font-size: 18px;
+  font-family: inherit;
+  line-height: 1.5;
+ }

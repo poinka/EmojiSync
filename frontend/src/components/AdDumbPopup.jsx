@@ -6,19 +6,19 @@ const ads = [
     title: "🤯 She Drank THIS Every Morning",
     text: "You won't believe how they look now!",
     image: "/adPhoto.png",
-    link: "https://example.com/miracle"
+    link: "https://github.com/poinka/EmojiSync"
   },
   {
     title: "🧓 Grandpa Maxim's Secret",
     text: "Lived to 110. What was he hiding?",
     image: "/adPhoto.png",
-    link: "https://example.com/maxim"
+    link: "https://github.com/poinka/EmojiSync"
   },
   {
     title: "🌴 Bali Apartment – 1100% ROI",
     text: "Only 3 left! Invest or cry.",
     image: "/adPhoto.png",
-    link: "https://example.com/bali"
+    link: "https://github.com/poinka/EmojiSync"
   }
 ];
 
