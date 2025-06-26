@@ -1,5 +1,5 @@
 import os
-
+import torch
 import faiss
 import numpy as np
 import pandas as pd
@@ -46,14 +46,14 @@ class VectorDB:
             if i > limit:
                 break
 
-    def get_embedding(self, text, tokenizer, model, device='cpu'):
+    def encode(self, text, device='cpu'):
         # Tokenization
-        inputs = tokenizer(text, return_tensors="pt", padding=True, truncation=True, max_length=512)
+        inputs = self.tokenizer(text, return_tensors="pt", padding=True, truncation=True, max_length=512)
         inputs = {key: val.to(device) for key, val in inputs.items()}
         
         # Get model outputs
         with torch.no_grad():
-            outputs = model(**inputs, output_hidden_states=True)
+            outputs = self.model(**inputs, output_hidden_states=True)
         
         # Extract the last hidden state (batch_size, seq_len, hidden_size)
         hidden_states = outputs.hidden_states[-1]  # Last layer
@@ -62,7 +62,7 @@ class VectorDB:
         return cls_embedding.astype(np.float32)
 
     def add_text(self, text: str, category: str):
-        vector = self.get_embedding(text, self.tokenizer, self.model)
+        vector = self.encode(text)
         payload = {"text": text, "category": category}
         point = PointStruct(
             id=str(uuid.uuid4()),
