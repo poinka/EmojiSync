@@ -40,7 +40,7 @@ class VectorDB:
         """Заполнение базы из датасета"""
         print("Fill database")
         quotes = pd.read_csv("selected_quotes.csv")
-        limit = 100
+        limit = 1000
         for i, row in quotes.iterrows():
             self.add_text(row['quote'], row['category'])
             if i > limit:
@@ -72,7 +72,7 @@ class VectorDB:
         self.client.upsert(collection_name=self.collection_name, points=[point])
 
     def search(self, text: str, top_k: int = 1):
-        vector = self.encode(text, self.tokenizer, self.model)
+        vector = self.encode(text)
         results = self.client.query_points(
             collection_name=self.collection_name,
             query=vector.tolist(),
