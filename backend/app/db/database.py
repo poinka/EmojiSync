@@ -1,23 +1,26 @@
 import faiss
 import numpy as np
+import pandas as pd
 from sentence_transformers import SentenceTransformer
 
 class VectorDB:
     def __init__(self):
-        self.model = SentenceTransformer('all-MiniLM-L6-v2')
-        self.index = faiss.IndexFlatL2(384)  # Размер эмбеддингов модели
+        self.model = SentenceTransformer('SamLowe/roberta-base-go_emotions')
+        self.index = faiss.IndexFlatL2(768)  # Размер эмбеддингов модели
         self.texts = []
 
         self.__setup_db()
 
     def __setup_db(self):
         # TODO
-        ...
+        quotes = pd.read_csv("selected_quotes.csv")
+        for _, row in quotes.iterrows():
+            self.add_text(row['text'], row['category'])
 
-    def add_text(self, text: str):
+    def add_text(self, text: str, category: str):
         embedding = self.model.encode([text])
         self.index.add(np.array(embedding, dtype='float32'))
-        self.texts.append(text)
+        self.texts.append((text, category))
 
     def search(self, query: str, top_k: int = 5):
         query_vec = self.model.encode([query])
