@@ -72,7 +72,7 @@ class VectorDB:
         self.client.upsert(collection_name=self.collection_name, points=[point])
 
     def search(self, text: str, top_k: int = 1):
-        vector = self.get_embedding(text, self.tokenizer, self.model)
+        vector = self.encode(text, self.tokenizer, self.model)
         results = self.client.query_points(
             collection_name=self.collection_name,
             query=vector.tolist(),
