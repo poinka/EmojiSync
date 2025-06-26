@@ -3,6 +3,7 @@ import os
 import faiss
 import numpy as np
 import pandas as pd
+import torch
 from qdrant_client import QdrantClient
 from qdrant_client.models import PointStruct, VectorParams, Distance
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
@@ -45,7 +46,7 @@ class VectorDB:
             if i > limit:
                 break
 
-    def get_embedding(text, tokenizer, model, device='cpu'):
+    def get_embedding(self, text, tokenizer, model, device='cpu'):
         # Tokenization
         inputs = tokenizer(text, return_tensors="pt", padding=True, truncation=True, max_length=512)
         inputs = {key: val.to(device) for key, val in inputs.items()}
@@ -70,11 +71,11 @@ class VectorDB:
         )
         self.client.upsert(collection_name=self.collection_name, points=[point])
 
-    def search(self, query: str, top_k: int = 1):
-        query_vector = self.encode(query)
+    def search(self, text: str, top_k: int = 1):
+        vector = self.get_embedding(text, self.tokenizer, self.model)
         results = self.client.query_points(
             collection_name=self.collection_name,
-            query=query_vector.tolist(),
+            query=vector.tolist(),
             limit=top_k,
             with_payload=True
         )
