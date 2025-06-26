@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 from qdrant_client import QdrantClient
 from qdrant_client.models import PointStruct, VectorParams, Distance
-from sentence_transformers import SentenceTransformer
+from transformers import AutoTokenizer, AutoModelForSequenceClassification
 import numpy as np
 import uuid
 
@@ -15,7 +15,8 @@ class VectorDB:
         print("Init database")
         self.dim = dim
         self.collection_name = collection_name
-        self.model = SentenceTransformer('SamLowe/roberta-base-go_emotions')
+        self.model = AutoModelForSequenceClassification.from_pretrained('SamLowe/roberta-base-go_emotions')
+        self.tokenizer = AutoTokenizer.from_pretrained('SamLowe/roberta-base-go_emotions')
         self.client = QdrantClient(":memory:")  # или url="http://localhost:6333"
         self.__setup_db()
 
@@ -44,12 +45,23 @@ class VectorDB:
             if i > limit:
                 break
 
-    def encode(self, text: str) -> np.ndarray:
-        embedding = self.model.encode(text, normalize_embeddings=True)
-        return np.array(embedding, dtype='float32')
+    def get_embedding(text, tokenizer, model, device='cpu'):
+        # Tokenization
+        inputs = tokenizer(text, return_tensors="pt", padding=True, truncation=True, max_length=512)
+        inputs = {key: val.to(device) for key, val in inputs.items()}
+        
+        # Get model outputs
+        with torch.no_grad():
+            outputs = model(**inputs, output_hidden_states=True)
+        
+        # Extract the last hidden state (batch_size, seq_len, hidden_size)
+        hidden_states = outputs.hidden_states[-1]  # Last layer
+        # Use the [CLS] token embedding (first position)
+        cls_embedding = hidden_states[:, 0, :].squeeze().cpu().numpy()
+        return cls_embedding.astype(np.float32)
 
     def add_text(self, text: str, category: str):
-        vector = self.encode(text)
+        vector = self.get_embedding(text, self.tokenizer, self.model)
         payload = {"text": text, "category": category}
         point = PointStruct(
             id=str(uuid.uuid4()),
