@@ -1,3 +1,5 @@
+import os
+
 import faiss
 import numpy as np
 import pandas as pd
@@ -33,7 +35,7 @@ class VectorDB:
             self.__load_dataset()
 
     def __load_dataset(self):
-        """Заполнение базы из датасета (можно заменить на загрузку файла)"""
+        """Заполнение базы из датасета"""
         print("Fill database")
         quotes = pd.read_csv("selected_quotes.csv")
         limit = 100
@@ -64,7 +66,7 @@ class VectorDB:
             limit=top_k,
             with_payload=True
         )
-        return [hit['text'] for hit in results.points][0]
+        return [hit.payload['text'] for hit in results.points][0]
 
 
 if __name__ == '__main__':
