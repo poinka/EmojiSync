@@ -1,3 +1,6 @@
+import faiss
+import numpy as np
+import pandas as pd
 from qdrant_client import QdrantClient
 from qdrant_client.models import PointStruct, VectorParams, Distance
 from sentence_transformers import SentenceTransformer
@@ -6,10 +9,10 @@ import uuid
 
 
 class VectorDB:
-    def __init__(self, dim=384, collection_name="my_collection"):
+    def __init__(self, dim=768, collection_name="my_collection"):
         self.dim = dim
         self.collection_name = collection_name
-        self.model = SentenceTransformer('all-MiniLM-L6-v2')
+        self.model = SentenceTransformer('SamLowe/roberta-base-go_emotions')
         self.client = QdrantClient(":memory:")  # или url="http://localhost:6333"
 
         self.__setup_db()
@@ -31,16 +34,9 @@ class VectorDB:
 
     def __load_dataset(self):
         """Заполнение базы из датасета (можно заменить на загрузку файла)"""
-        print("Инициализация коллекции: загрузка датасета...")
-        initial_texts = [
-            "Artificial intelligence is transforming the world.",
-            "Qdrant is a vector similarity search engine.",
-            "Transformers models produce embeddings from text.",
-            "Semantic search helps find relevant information.",
-            "Natural Language Processing is a core AI field."
-        ]
-        for text in initial_texts:
-            self.add_text(text)
+        quotes = pd.read_csv("selected_quotes.csv")
+        for _, row in quotes.iterrows():
+            self.add_text(row['text'], row['category'])
 
     def encode(self, text: str) -> np.ndarray:
         embedding = self.model.encode(text, normalize_embeddings=True)
