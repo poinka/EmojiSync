@@ -11,6 +11,7 @@ import numpy as np
 import uuid
 
 
+
 class VectorDB:
     def __init__(self, dim=768, collection_name="my_collection"):
         print("Init database")
@@ -39,10 +40,10 @@ class VectorDB:
     def __load_dataset(self):
         """Заполнение базы из датасета"""
         print("Fill database")
-        quotes = pd.read_csv("selected_quotes.csv")
-        limit = 1000
+        quotes = pd.read_csv("selected_quotes_embeddings.csv")
+        limit = 100000
         for i, row in quotes.iterrows():
-            self.add_text(row['quote'], row['category'])
+            self.add_text(row['quote'], row['category'], row['embeddings'])
             if i > limit:
                 break
 
@@ -61,8 +62,12 @@ class VectorDB:
         cls_embedding = hidden_states[:, 0, :].squeeze().cpu().numpy()
         return cls_embedding.astype(np.float32)
 
-    def add_text(self, text: str, category: str):
-        vector = self.encode(text)
+    def add_text(self, text: str, category: str, embeddings: str):
+        #vector = self.encode(text)
+        if isinstance(embeddings, str):
+            vector = np.array(eval(embeddings), dtype=np.float32)
+        else:
+            vector = embeddings
         payload = {"text": text, "category": category}
         point = PointStruct(
             id=str(uuid.uuid4()),
