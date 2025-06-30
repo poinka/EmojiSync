@@ -33,7 +33,7 @@ class VectorDB:
             )
         # Проверка: пуста ли коллекция?
         count = self.client.count(self.collection_name, exact=True).count
-        if count == 0:
+        if count < 100000:
             print("Collection is empty — loading dataset...")
             self.__load_dataset()
         else:
@@ -52,7 +52,7 @@ class VectorDB:
                 vector = row['embeddings']
             vector = vector / np.linalg.norm(vector)
             vectors.append(vector)
-            self.add_text(row['quote'], row['category'], vector)
+            self.add_text(row['quote'], row['author'], row['category'], vector)
             if i > limit:
                 break
 
@@ -71,12 +71,12 @@ class VectorDB:
         cls_embedding = hidden_states[:, 0, :].squeeze().cpu().numpy()
         return cls_embedding.astype(np.float32)
 
-    def add_text(self, text: str, category: str, vector):
+    def add_text(self, text: str, author: str, category: str, vector):
         #vector = self.encode(text)
         if isinstance(vector, str):
             vector = np.array(eval(vector), dtype=np.float32)
         
-        payload = {"text": text, "category": category}
+        payload = {"text": text, "autor": author, "category": category}
         vector_id = str(uuid.uuid4())
         point = PointStruct(
             id=vector_id,
@@ -84,7 +84,6 @@ class VectorDB:
             payload=payload
         )
         self.client.upsert(collection_name=self.collection_name, points=[point])
-        self.vector_ids.append(vector_id)
 
     def search(self, text: str, top_k: int = 10):
         vector = self.encode(text)
@@ -99,7 +98,9 @@ class VectorDB:
 
         if not search_result:
             return "No matches found"
-        return search_result[0].payload["text"]
+        return {"text": search_result[0].payload["text"], 
+                "author": search_result[0].payload["author"]
+        }
 
 
 
