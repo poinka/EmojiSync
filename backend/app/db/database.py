@@ -23,10 +23,20 @@ class VectorDB:
         self.client = QdrantClient(host="qdrant", port=6333) #":memory:" или url="http://localhost:6333"
         self.__setup_db()
 
-    def __setup_db(self):
+    def __setup_db(self, force_recreate=False): # Set True to force recreate the collection
         print("Setup database")
         # создаём коллекцию, если не существует
-        if not self.client.collection_exists(self.collection_name):
+        if force_recreate:
+            if self.client.collection_exists(self.collection_name):
+                self.client.delete_collection(self.collection_name)
+            self.client.create_collection(
+                collection_name=self.collection_name,
+                vectors_config=VectorParams(
+                    size=self.dim,
+                    distance=Distance.COSINE
+                )
+            )
+        elif not self.client.collection_exists(self.collection_name):
             self.client.create_collection(
                 collection_name=self.collection_name,
                 vectors_config=VectorParams(
