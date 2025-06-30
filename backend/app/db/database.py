@@ -1,6 +1,5 @@
 import os
 import torch
-import faiss
 import numpy as np
 import pandas as pd
 from qdrant_client import QdrantClient
@@ -18,9 +17,7 @@ class VectorDB:
         self.nbits = 128
         self.model = AutoModelForSequenceClassification.from_pretrained('SamLowe/roberta-base-go_emotions')
         self.tokenizer = AutoTokenizer.from_pretrained('SamLowe/roberta-base-go_emotions')
-        self.client = QdrantClient(":memory:")  # или url="http://localhost:6333"
-        self.index = faiss.IndexLSH(self.dim, self.nbits)
-        self.vector_ids = []
+        self.client = QdrantClient(host="qdrant", port=6333) #":memory:" или url="http://localhost:6333"
         self.__setup_db()
 
     def __setup_db(self):
@@ -37,7 +34,10 @@ class VectorDB:
         # Проверка: пуста ли коллекция?
         count = self.client.count(self.collection_name, exact=True).count
         if count == 0:
+            print("Collection is empty — loading dataset...")
             self.__load_dataset()
+        else:
+            print("Dataset already loaded. Skipping.")
 
     def __load_dataset(self):
         """Заполнение базы из датасета"""
@@ -55,7 +55,6 @@ class VectorDB:
             self.add_text(row['quote'], row['category'], vector)
             if i > limit:
                 break
-        self.index.add(np.array(vectors, dtype=np.float32))
 
     def encode(self, text, device='cpu'):
         # Tokenization
@@ -86,21 +85,22 @@ class VectorDB:
         )
         self.client.upsert(collection_name=self.collection_name, points=[point])
         self.vector_ids.append(vector_id)
-        self.index.add(vector.reshape(1, -1))
 
     def search(self, text: str, top_k: int = 10):
         vector = self.encode(text)
         vector = vector / np.linalg.norm(vector)
-        vector = vector.reshape(1, -1).astype(np.float32)
-        _, indices = self.index.search(vector, top_k)
-        if len(indices[0]) == 0:
+
+        search_result = self.client.search(
+            collection_name=self.collection_name,
+            query_vector=vector.tolist(),
+            limit=top_k,
+            with_payload=True
+        )
+
+        if not search_result:
             return "No matches found"
-        nearest_ids = [self.vector_ids[idx] for idx in indices[0] if idx < len(self.vector_ids)]
-        if not nearest_ids:
-            return "No matches found"
-        selected_id = random.choice(nearest_ids)
-        result = self.client.retrieve(collection_name=self.collection_name, ids=[selected_id], with_payload=True)
-        return result[0].payload["text"]
+        return search_result[0].payload["text"]
+
 
 
 if __name__ == '__main__':
