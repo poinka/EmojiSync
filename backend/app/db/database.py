@@ -33,11 +33,11 @@ class VectorDB:
             )
         # Проверка: пуста ли коллекция?
         count = self.client.count(self.collection_name, exact=True).count
-        if count < 100000:
-            print("Collection is empty — loading dataset...")
-            self.__load_dataset()
-        else:
-            print("Dataset already loaded. Skipping.")
+        #if count < 100000:
+        print("Collection is empty — loading dataset...")
+        self.__load_dataset()
+        # else:
+        #     print("Dataset already loaded. Skipping.")
 
     def __load_dataset(self):
         """Заполнение базы из датасета"""
@@ -76,7 +76,7 @@ class VectorDB:
         if isinstance(vector, str):
             vector = np.array(eval(vector), dtype=np.float32)
         
-        payload = {"text": text, "autor": author, "category": category}
+        payload = {"text": text, "author": author, "category": category}
         vector_id = str(uuid.uuid4())
         point = PointStruct(
             id=vector_id,
