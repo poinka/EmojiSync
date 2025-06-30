@@ -33,11 +33,11 @@ class VectorDB:
             )
         # Проверка: пуста ли коллекция?
         count = self.client.count(self.collection_name, exact=True).count
-        #if count < 100000:
-        print("Collection is empty — loading dataset...")
-        self.__load_dataset()
-        # else:
-        #     print("Dataset already loaded. Skipping.")
+        if count < 100000:
+            print("Collection is empty — loading dataset...")
+            self.__load_dataset()
+        else:
+            print("Dataset already loaded. Skipping.")
 
     def __load_dataset(self):
         """Заполнение базы из датасета"""
