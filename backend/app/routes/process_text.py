@@ -7,6 +7,5 @@ from ..models import *
 @app.post("/process")
 async def transform_text(request: TextRequest):
     original_text = request.text
-    transformed_text = db.search(original_text)
-
-    return {"original": original_text, "transformed": transformed_text}
+    res = db.search(original_text)
+    return {"original": original_text, "transformed": res["text"], "author": res["author"]}
