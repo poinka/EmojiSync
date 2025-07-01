@@ -45,7 +45,7 @@ const TranslateInputBox = ({ value, onChange }) => {
         <div className="translate-preview">
           {result ? (
             <div>
-              <span className="translate-result">{result.author}</span>: {result.transformed}
+              <span className="label">{result.author}:</span> <span className="translate-result">{result.transformed}</span>
             </div>
           ) : (
             <div className="translate-hint">
@@ -53,7 +53,6 @@ const TranslateInputBox = ({ value, onChange }) => {
             </div>
           )}
         </div>
-
       </div>
     </div>
   );
