@@ -13,9 +13,9 @@ const TranslateInputBox = ({ value, onChange }) => {
         body: JSON.stringify({ text: value })
       });
       const data = await res.json();
-      setResult(data.transformed); 
+      setResult(data); 
     } catch (e) {
-      setResult("Ошибка: " + e.message);
+      setResult({author: "Error", transformed: e.message});
     }
   };
 
@@ -45,7 +45,7 @@ const TranslateInputBox = ({ value, onChange }) => {
         <div className="translate-preview">
           {result ? (
             <div>
-              <b>Result:</b> <span className="translate-result">{result}</span>
+              <span className="label">{result.author}:</span> <span className="translate-result">{result.transformed}</span>
             </div>
           ) : (
             <div className="translate-hint">
@@ -53,7 +53,6 @@ const TranslateInputBox = ({ value, onChange }) => {
             </div>
           )}
         </div>
-
       </div>
     </div>
   );

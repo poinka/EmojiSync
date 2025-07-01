@@ -1,19 +1,19 @@
 const mockHistory = [
   {
-    input: "I'm feeling really sad and alone today.",
-    output: "I'm feeling really sad and alone today." // псевдоперевод
+    input: "I can’t believe I missed the last train home",
+    output: "Every missed train is an unexpected story. Take a deep breath — tomorrow is a new day!"
   },
   {
-    input: "This course is amazing! Thank you so much.",
-    output: "This course is amazing! Thank you so much."
+    input: "It’s raining again and I forgot my umbrella",
+    output: "Forgot your umbrella? Classic. Enjoy your free shower — maybe it’ll wash away your bad luck."
   },
   {
-    input: "Why is everything going wrong today?",
-    output: "Why is everything going wrong today?"
+    input: "Finished a huge project, now I can finally relax",
+    output: "Relax? Yeah right. Wait five minutes — the next deadline is coming for you."
   },
   {
-    input: "I just got a promotion and I'm thrilled!",
-    output: "I just got a promotion and I'm thrilled!"
+    input: "My favorite band is coming to my city this summer!",
+    output: "You’ll lose your voice, your money, and half your friends in the crowd — but hey, it’ll be legendary."
   }
 ];
 

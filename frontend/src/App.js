@@ -42,7 +42,7 @@ const [cards, setCards] = useState(mockHistory);
       </div>
 
       <div className="history-heading">
-        ↓ Your recent messages ↓
+        ↓ Recent messages ↓
       </div>
 
       <div className="history-grid">
