@@ -8,6 +8,7 @@ from transformers import AutoTokenizer, AutoModelForSequenceClassification
 import uuid
 import random
 import faiss
+import emoji
 
 
 class VectorDB:
@@ -27,6 +28,7 @@ class VectorDB:
         print("Setup database")
         # создаём коллекцию, если не существует
         if force_recreate:
+            print("Force recreate the collection")
             if self.client.collection_exists(self.collection_name):
                 self.client.delete_collection(self.collection_name)
             self.client.create_collection(
@@ -54,8 +56,6 @@ class VectorDB:
         print("Rebuilding FAISS index...")
         self.__rebuild_faiss_index()
             
-
-    
 
     def __rebuild_faiss_index(self):
         print("Rebuilding FAISS index...")
@@ -92,9 +92,6 @@ class VectorDB:
             offset = next_offset
 
 
-
-
-
     def __load_dataset(self):
         """Заполнение базы из датасета"""
         print("Fill database")
@@ -111,6 +108,14 @@ class VectorDB:
             self.add_text(row['quote'], row['author'], row['category'], vector)
             if i > limit:
                 break
+    
+
+    # Convert Emoji to Text Description
+    def demojize_text(self, text):
+        text = emoji.demojize(str(text), language='en')  # 😢 → ":crying_face:"
+        text = text.replace(":", "").replace("_", " ")
+        return text
+
 
     def encode(self, text, device='cpu'):
         # Tokenization
@@ -144,6 +149,7 @@ class VectorDB:
         self.vector_ids.append(vector_id)
 
     def search(self, text: str, top_k: int = 10):
+        text = self.demojize_text(text)
         vector = self.encode(text)
         vector = vector / np.linalg.norm(vector)
         vector = vector.reshape(1, -1).astype(np.float32)
