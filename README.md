@@ -35,8 +35,8 @@ Python Libraries: sentence-transformers, qdrant-client, faiss-cpu, pandas, numpy
 To set up the project locally:
 1. Clone the repository
 ```
-git clone https://github.com/your-org/emojisync.git
-cd emojisync
+git clone https://github.com/poinka/EmojiSync.git
+cd EmojiSync
 
 ```
 2. Build and start the containers
@@ -60,7 +60,7 @@ Once the system is running:
 1. Latency:
 On CPU, the system responds in:
 * ~0.05–0.10 seconds for short emoji inputs (single emoji or short phrase)
-* Up to ~0.25 seconds for longer, multi-emoji or text-rich inputs
+* Up to ~0.3 seconds for longer, multi-emoji or text-rich inputs
 
 2. Cold-start time:
 After full container startup and loading of embeddings into Qdrant, the system is ready in ~250–280 seconds
