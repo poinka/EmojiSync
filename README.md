@@ -15,6 +15,7 @@ The repository contains Jupyter notebooks for each project phase, as outlined be
 - `Iteration1.ipynb`: Baseline approach, treating emojis as unknown tokens (UNK) to assess their emotional contribution..
 - `Iteration2.ipynb`: Uses `emoji.demojize` to convert emojis to text descriptions (e.g., 😊 → ":smiling_face_with_smiling_eyes:") to capture emotional richness.
 - `Iteration3.ipynb`: Explores emoji2vec embeddings for advanced emoji handling (if time permits).
+- `Iteration4.ipynb`: Directly encodes emoji-rich text using the pretrained `roberta-base-go_emotions` model, leveraging its ability to handle emojis without preprocessing
 - `Database.ipynb`: Creates a vector database of emotionally rich texts without emojis.
 - `Inference.ipynb`: Demonstrates the inference pipeline.
 
@@ -47,6 +48,7 @@ To set up the project locally:
 1. Baseline (1st Iteration): Treat emojis as UNK tokens to evaluate their emotional impact.
 2. Demojize (2nd Iteration): Convert emojis to text descriptions using emoji.demojize for better emotional capture.
 3. Emoji2Vec (3rd Iteration): Use emoji2vec embeddings for advanced emoji handling (optional, time-permitting).
+4. Raw Input (4th Iteration): Use roberta-base-go_emotions to process raw emoji-text input directly, relying on the model's pretrained emoji understanding.
 
 
 ## Resources
