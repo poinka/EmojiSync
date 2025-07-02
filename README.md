@@ -33,15 +33,42 @@ Python Libraries: sentence-transformers, qdrant-client, faiss-cpu, pandas, numpy
 
 ## Installation
 To set up the project locally:
+1. Clone the repository
+```
+git clone https://github.com/your-org/emojisync.git
+cd emojisync
 
+```
+2. Build and start the containers
+   
+```
+docker compose up --build
 
+```
+3. Wait for the system to load data. Initial embedding upload and vector indexing may take 4–5 minutes.
 
+> Note: Due to repository size limits, the file selected_quotes_embeddings.csv is not included. However, it can be regenerated using the instructions in `Database.ipynb`
 
 ## Usage
-
+Once the system is running:
+* Open your browser and go to `http://localhost:3000`
+* Enter emojis or emoji-rich text (e.g., 🥺, I'm feeling 😡 today)
+* The system will return an emotionally matching quote retrieved from the vector database.
+* Press the button once again to see another appropriate quote
 
 ## Evaluation
+1. Latency:
+On CPU, the system responds in:
+* ~0.05–0.10 seconds for short emoji inputs (single emoji or short phrase)
+* Up to ~0.25 seconds for longer, multi-emoji or text-rich inputs
 
+2. Cold-start time:
+After full container startup and loading of embeddings into Qdrant, the system is ready in ~250–280 seconds
+
+3. Hardware requirements:
+* 8 GB RAM
+* 4-core CPU
+* 3 GB on Disk space
 
 ## Iterations
 
